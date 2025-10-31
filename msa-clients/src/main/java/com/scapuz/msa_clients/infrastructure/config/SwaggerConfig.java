@@ -15,24 +15,25 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class SwaggerConfig {
 
-    @Value("8080")
-    private String serverPort;
+        @Value("${server.port:8081}")
+        private String serverPort;
 
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("Client service API")
-                        .version("1.0.0")
-                        .description("Microservice for client management")
-                        .contact(new Contact()
-                                .name("Sebastian Capuz")
-                                .email("capuz.sebastian@outlook.com"))
-                        .license(new License().name("Apache 2.0").url("https://www.apache.org/licenses/LICENSE-2.0")))
-                .servers(List.of(
-                        new Server()
-                                .url("http://localhost:" + serverPort)
-                                .description("Dev server")));
-    }
+        @Bean
+        public OpenAPI customOpenAPI() {
+                return new OpenAPI()
+                                .info(new Info()
+                                                .title("Client service API")
+                                                .version("1.0.0")
+                                                .description("Microservice for client management")
+                                                .contact(new Contact()
+                                                                .name("Sebastian Capuz")
+                                                                .email("capuz.sebastian@outlook.com"))
+                                                .license(new License().name("Apache 2.0")
+                                                                .url("https://www.apache.org/licenses/LICENSE-2.0")))
+                                .servers(List.of(
+                                                new Server()
+                                                                .url("http://localhost:" + serverPort)
+                                                                .description("Dev server")));
+        }
 
 }
