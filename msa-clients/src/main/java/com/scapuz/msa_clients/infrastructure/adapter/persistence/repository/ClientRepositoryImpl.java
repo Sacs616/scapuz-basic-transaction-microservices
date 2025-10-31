@@ -23,7 +23,10 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public Client save(Client client) {
         log.debug("Saving client");
+        log.info("Client before mapping: {}", client);
+        log.info("Entity mapped: {}", clientMapper.toEntity(client));
         var entity = clientMapper.toEntity(client);
+
         var savedEntity = jpaClientRepository.save(entity);
         return clientMapper.toDomain(savedEntity);
     }

@@ -21,6 +21,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "clients", indexes = {
@@ -32,7 +33,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class ClientEntity {
+    @Id
+    private UUID clientId;
 
     @Column(name = "identification", nullable = false)
     private String identification;
@@ -41,7 +45,7 @@ public class ClientEntity {
     private String name;
 
     @Column(name = "genre", nullable = false)
-    private char genre;
+    private String genre;
 
     @Column(name = "birth_date")
     private LocalDate birthDate;
@@ -51,10 +55,6 @@ public class ClientEntity {
 
     @Column(name = "phone")
     private String phone;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID clientId;
 
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;

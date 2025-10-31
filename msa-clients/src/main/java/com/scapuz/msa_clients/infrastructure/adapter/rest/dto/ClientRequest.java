@@ -28,9 +28,9 @@ public class ClientRequest {
     @Schema(description = "Client name")
     private String name;
 
-    @NotNull(message = "Genre is required")
+    @NotBlank(message = "Genre is required")
     @Schema(description = "Client genre")
-    private char genre;
+    private String genre;
 
     @Past(message = "Birth date must be on the past")
     @JsonFormat(pattern = "yyyy-MM-dd")
