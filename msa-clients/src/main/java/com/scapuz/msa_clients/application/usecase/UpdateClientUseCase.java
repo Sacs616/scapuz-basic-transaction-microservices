@@ -32,13 +32,13 @@ public class UpdateClientUseCase {
         }
 
         Client clientToSave = Client.builder()
+                .clientId(clientId)
                 .identification(updatedClient.getIdentification())
                 .name(updatedClient.getName())
                 .genre(updatedClient.getGenre())
                 .birthDate(updatedClient.getBirthDate())
                 .address(updatedClient.getAddress())
                 .phone(updatedClient.getPhone())
-                .clientId(UUID.randomUUID())
                 .passwordHash(updatedClient.getIdentification() + "hash + salt")
                 .status(Client.ClientStatus.ACTIVE)
                 .createdAt(existingClient.getCreatedAt())
