@@ -28,7 +28,7 @@ public class ClientResponse {
     private String name;
 
     @Schema(description = "Client genre")
-    private char genre;
+    private String genre;
 
     @Schema(description = "Client's address")
     private String address;
