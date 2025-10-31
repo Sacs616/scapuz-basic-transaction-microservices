@@ -3,7 +3,6 @@
 
 CREATE TABLE IF NOT EXISTS clients (
     client_id UUID PRIMARY KEY,
-    client_code VARCHAR(20) NOT NULL UNIQUE, -- Added missing column
     identification VARCHAR(15) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
     genre VARCHAR(1) NOT NULL,
@@ -19,6 +18,5 @@ CREATE TABLE IF NOT EXISTS clients (
 );
 
 -- Create indexes for better query performance
-CREATE INDEX idx_client_code ON clients(client_code);
 CREATE INDEX idx_created_at ON clients(created_at DESC);
 CREATE INDEX idx_identification ON clients(identification); -- Consider adding this too

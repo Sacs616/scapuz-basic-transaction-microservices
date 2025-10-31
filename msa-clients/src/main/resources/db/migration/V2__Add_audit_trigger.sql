@@ -18,15 +18,15 @@ RETURNS TRIGGER AS $$
 BEGIN
     IF (TG_OP = 'DELETE') THEN
         INSERT INTO client_audit_log (client_id, operation, old_values)
-        VALUES (OLD.id, 'DELETE', row_to_json(OLD));
+        VALUES (OLD.client_id, 'DELETE', row_to_json(OLD));
         RETURN OLD;
     ELSIF (TG_OP = 'UPDATE') THEN
         INSERT INTO client_audit_log (client_id, operation, old_values, new_values)
-        VALUES (NEW.id, 'UPDATE', row_to_json(OLD), row_to_json(NEW));
+        VALUES (NEW.client_id, 'UPDATE', row_to_json(OLD), row_to_json(NEW));
         RETURN NEW;
     ELSIF (TG_OP = 'INSERT') THEN
         INSERT INTO client_audit_log (client_id, operation, new_values)
-        VALUES (NEW.id, 'INSERT', row_to_json(NEW));
+        VALUES (NEW.client_id, 'INSERT', row_to_json(NEW));
         RETURN NEW;
     END IF;
     RETURN NULL;
