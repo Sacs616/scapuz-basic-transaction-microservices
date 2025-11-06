@@ -1,4 +1,3 @@
--- Create audit log table
 CREATE TABLE IF NOT EXISTS client_audit_log (
     audit_id BIGSERIAL PRIMARY KEY,
     client_id UUID NOT NULL,
@@ -12,7 +11,6 @@ CREATE TABLE IF NOT EXISTS client_audit_log (
 CREATE INDEX idx_client_audit_client_id ON client_audit_log(client_id);
 CREATE INDEX idx_client_audit_changed_at ON client_audit_log(changed_at DESC);
 
--- Create trigger function for audit logging
 CREATE OR REPLACE FUNCTION audit_client_changes()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -33,7 +31,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Attach trigger to clients table
 CREATE TRIGGER client_audit_trigger
 AFTER INSERT OR UPDATE OR DELETE ON clients
 FOR EACH ROW EXECUTE FUNCTION audit_client_changes();

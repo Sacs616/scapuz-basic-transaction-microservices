@@ -19,7 +19,6 @@ public class ClientTest {
     @Test
     @DisplayName("Should create valid client")
     void shouldCreateValidClient() {
-        // Arrange & Act
         Client client = Client.builder()
                 .clientId(UUID.randomUUID())
                 .name("John Doe")
@@ -29,7 +28,6 @@ public class ClientTest {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        // Assert
         assertNotNull(client);
         assertEquals("John Doe", client.getName());
         assertTrue(client.isActive());

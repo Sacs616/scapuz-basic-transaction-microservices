@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ClientIntegrationTest {
 
+        @SuppressWarnings("resource")
         @Container
         static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
                         .withDatabaseName("clients_db")
@@ -54,7 +55,6 @@ class ClientIntegrationTest {
         @Order(1)
         @DisplayName("Should create client successfully - Integration Test")
         void shouldCreateClientSuccessfully() throws Exception {
-                // Arrange
                 ClientRequest request = ClientRequest.builder()
                                 .identification("1700000000")
                                 .name("John Doe")
@@ -64,7 +64,6 @@ class ClientIntegrationTest {
                                 .phone("+593987654321")
                                 .build();
 
-                // Act & Assert
                 MvcResult result = mockMvc.perform(post("/api/v1/clients")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request)))
@@ -74,7 +73,6 @@ class ClientIntegrationTest {
                                 .andExpect(jsonPath("$.status").value("ACTIVE"))
                                 .andReturn();
 
-                // Store the created ID for subsequent tests
                 ClientResponse response = objectMapper.readValue(
                                 result.getResponse().getContentAsString(),
                                 ClientResponse.class);
@@ -105,7 +103,6 @@ class ClientIntegrationTest {
         @Order(4)
         @DisplayName("Should update client successfully - Integration Test")
         void shouldUpdateClientSuccessfully() throws Exception {
-                // Arrange
                 ClientRequest updateRequest = ClientRequest.builder()
                                 .identification("1700000000")
                                 .name("Doe Updated")
@@ -115,7 +112,6 @@ class ClientIntegrationTest {
                                 .phone("+593987654321")
                                 .build();
 
-                // Act & Assert
                 mockMvc.perform(put("/api/v1/clients/" + createdClientId)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(updateRequest)))
@@ -139,14 +135,12 @@ class ClientIntegrationTest {
         @Order(6)
         @DisplayName("Should return 400 for invalid client data - Integration Test")
         void shouldReturn400ForInvalidClientData() throws Exception {
-                // Arrange - Invalid email
                 ClientRequest invalidRequest = ClientRequest.builder()
                                 .name("John Doe")
                                 .phone("+593987654321")
                                 .birthDate(LocalDate.of(1990, 5, 15))
                                 .build();
 
-                // Act & Assert
                 mockMvc.perform(post("/api/v1/clients")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(invalidRequest)))
@@ -161,7 +155,6 @@ class ClientIntegrationTest {
                 mockMvc.perform(delete("/api/v1/clients/" + createdClientId))
                                 .andExpect(status().isNoContent());
 
-                // Verify deletion
                 mockMvc.perform(get("/api/v1/clients/" + createdClientId))
                                 .andExpect(status().isNotFound());
         }

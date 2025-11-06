@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 
 import com.scapuz.msa_clients.domain.model.Client;
 import com.scapuz.msa_clients.infrastructure.adapter.persistence.entity.ClientEntity;
