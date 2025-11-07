@@ -10,7 +10,6 @@ import com.scapuz.msa_accounts.domain.model.Account;
 import com.scapuz.msa_accounts.domain.repository.AccountRepository;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Slf4j
 @Component

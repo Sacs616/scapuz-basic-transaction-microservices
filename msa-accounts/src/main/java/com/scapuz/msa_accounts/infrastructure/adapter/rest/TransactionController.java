@@ -17,7 +17,6 @@ import com.scapuz.msa_accounts.infrastructure.adapter.rest.dto.TransactionRespon
 import com.scapuz.msa_accounts.infrastructure.adapter.rest.mapper.TransactionDtoMapper;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j

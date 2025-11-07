@@ -25,15 +25,12 @@ public class CreateAccountUseCase {
     public Account execute(Account account) {
         log.info("Creating account for client: {}", account.getClientId());
 
-        // 1. Validate account
         account.validate();
 
-        // 2. Check for duplicate account number
         if (accountRepository.existsByAccountNumber(account.getAccountNumber())) {
             throw new DomainException("Account number already exists: " + account.getAccountNumber());
         }
 
-        // 3. Validate client exists and is active (with Circuit Breaker)
         try {
             ClientDTO client = clientServiceClient.getClient(account.getClientId()).join();
 
@@ -48,7 +45,6 @@ public class CreateAccountUseCase {
             throw new DomainException("Unable to validate client. Please try again later.", e);
         }
 
-        // 4. Set defaults
         Account newAccount = Account.builder()
                 .clientId(account.getClientId())
                 .accountNumber(account.getAccountNumber())
@@ -61,7 +57,6 @@ public class CreateAccountUseCase {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        // 5. Save
         Account saved = accountRepository.save(newAccount);
 
         saved.generateAccountNumber();
