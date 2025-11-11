@@ -1,5 +1,6 @@
 package com.scapuz.msa_accounts.application.port.input;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,4 +25,9 @@ public interface AccountService {
     Transaction getTransactionById(Integer id);
 
     List<Transaction> getTransactionsByAccountId(Integer accountId);
+
+    List<Transaction> getTransactionsByAccountIdAndDateRange(Integer accountId, LocalDateTime startDate,
+            LocalDateTime endDate);
+
+    List<Transaction> getTransactionsByDateRange(LocalDateTime startDate, LocalDateTime endDate);
 }

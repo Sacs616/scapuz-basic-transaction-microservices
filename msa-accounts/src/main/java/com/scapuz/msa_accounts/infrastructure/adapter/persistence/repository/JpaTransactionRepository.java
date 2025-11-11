@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.scapuz.msa_accounts.infrastructure.adapter.persistence.entity.TransactionEntity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,13 @@ public interface JpaTransactionRepository extends JpaRepository<TransactionEntit
 
     @Query("SELECT t FROM TransactionEntity t WHERE t.account.id = :accountId AND t.status = :status")
     List<TransactionEntity> findByAccountIdAndStatus(Integer accountId, TransactionEntity.TransactionStatus status);
+
+    @Query("SELECT t FROM TransactionEntity t WHERE t.account.id = :accountId AND createdAt between :startDate AND :endDate")
+    List<TransactionEntity> findByAccountIdAndDateRange(Integer accountId, LocalDateTime startDate,
+            LocalDateTime endDate);
+
+    @Query("SELECT t FROM TransactionEntity t WHERE t.createdAt between :startDate AND :endDate")
+    List<TransactionEntity> findByDateRange(LocalDateTime startDate, LocalDateTime endDate);
 
     boolean existsByTransactionNumber(String transactionNumber);
 }

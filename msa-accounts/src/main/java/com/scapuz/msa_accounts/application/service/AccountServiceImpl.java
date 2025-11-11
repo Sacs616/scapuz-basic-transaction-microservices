@@ -9,6 +9,7 @@ import com.scapuz.msa_accounts.application.usecase.*;
 import com.scapuz.msa_accounts.domain.model.Account;
 import com.scapuz.msa_accounts.domain.model.Transaction;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +23,7 @@ public class AccountServiceImpl implements AccountService {
     private final UpdateAccountUseCase updateAccountUseCase;
     private final CreateTransactionUseCase createTransactionUseCase;
     private final GetTransactionUseCase getTransactionUseCase;
+    private final GetTransactionsByDateRangeUseCase getTransactionsByDateRangeUseCase;
 
     @Override
     public Account createAccount(Account account) {
@@ -72,5 +74,22 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(readOnly = true)
     public List<Transaction> getTransactionsByAccountId(Integer accountId) {
         return getTransactionUseCase.executeByAccountId(accountId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Transaction> getTransactionsByAccountIdAndDateRange(
+            Integer accountId,
+            LocalDateTime startDate,
+            LocalDateTime endDate) {
+        return getTransactionsByDateRangeUseCase.executeByAccount(accountId, startDate, endDate);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Transaction> getTransactionsByDateRange(
+            LocalDateTime startDate,
+            LocalDateTime endDate) {
+        return getTransactionsByDateRangeUseCase.executeAll(startDate, endDate);
     }
 }

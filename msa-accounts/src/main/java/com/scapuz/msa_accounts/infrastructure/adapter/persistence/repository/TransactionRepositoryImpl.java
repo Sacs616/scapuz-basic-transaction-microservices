@@ -9,6 +9,7 @@ import com.scapuz.msa_accounts.domain.repository.TransactionRepository;
 import com.scapuz.msa_accounts.infrastructure.adapter.persistence.entity.TransactionEntity;
 import com.scapuz.msa_accounts.infrastructure.adapter.persistence.mapper.TransactionMapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,5 +60,19 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     @Override
     public boolean existsByTransactionNumber(String transactionNumber) {
         return jpaRepository.existsByTransactionNumber(transactionNumber);
+    }
+
+    @Override
+    public List<Transaction> findByAccountIdAndDateRange(Integer accountId, LocalDateTime startDate,
+            LocalDateTime endDate) {
+        log.debug("Finding transactions for account {} between {} and {}",
+                accountId, startDate, endDate);
+        return mapper.toDomainList(jpaRepository.findByAccountIdAndDateRange(accountId, startDate, endDate));
+    }
+
+    @Override
+    public List<Transaction> findByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        log.debug("Finding all transactions between {} and {}", startDate, endDate);
+        return mapper.toDomainList(jpaRepository.findByDateRange(startDate, endDate));
     }
 }

@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +18,8 @@ import com.scapuz.msa_accounts.infrastructure.adapter.rest.dto.TransactionReques
 import com.scapuz.msa_accounts.infrastructure.adapter.rest.dto.TransactionResponse;
 import com.scapuz.msa_accounts.infrastructure.adapter.rest.mapper.TransactionDtoMapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -66,8 +68,53 @@ public class TransactionController {
         List<Transaction> transactions = accountService.getTransactionsByAccountId(accountId);
         List<TransactionResponse> responses = transactions.stream()
                 .map(dtoMapper::toResponse)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(responses);
     }
+
+    @GetMapping("/account/{accountId}/date-range")
+    public ResponseEntity<List<TransactionResponse>> getTransactionsByAccountIdAndDateRange(
+            @Parameter(description = "Account ID") @PathVariable Integer accountId,
+
+            @Parameter(description = "Start date (inclusive)", example = "2025-01-01T00:00:00") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+
+            @Parameter(description = "End date (inclusive)", example = "2025-01-01T00:00:00") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        log.info("REST request to get transactions for account {} between {} and {}",
+                accountId, startDate, endDate);
+
+        List<Transaction> transactions = accountService
+                .getTransactionsByAccountIdAndDateRange(accountId, startDate, endDate);
+
+        List<TransactionResponse> responses = transactions.stream()
+                .map(dtoMapper::toResponse)
+                .toList();
+
+        log.info("Found {} transactions for account {} in date range",
+                responses.size(), accountId);
+
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/date-range")
+    public ResponseEntity<List<TransactionResponse>> getTransactionsByDateRange(
+
+            @Parameter(description = "Start date (inclusive)", example = "2025-01-01T00:00:00") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+
+            @Parameter(description = "End date (inclusive)", example = "2025-01-01T00:00:00") @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        log.info("REST request to get transactions between {} and {}", startDate, endDate);
+
+        List<Transaction> transactions = accountService
+                .getTransactionsByDateRange(startDate, endDate);
+
+        List<TransactionResponse> responses = transactions.stream()
+                .map(dtoMapper::toResponse)
+                .toList();
+
+        log.info("Found {} transactions in date range",
+                responses.size());
+
+        return ResponseEntity.ok(responses);
+    }
+
 }
